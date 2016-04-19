@@ -1,0 +1,65 @@
+RFXtrx is a handy 433.92 MHz transmitter and reciever. Use it to control and sense in a smart home, smart car, smart ship, smart farm you name it.
+http://www.rfxcom.com/ It connects to a USB port of your Raspberry Pi.
+
+Install ser2net on your raspberry pi.
+
+Disable Serial Console
+======================
+sudo nano /etc/inittab
+insert a # sign in front of this line:
+T0:23:respawn:/sbin/getty -L ttyAMA0 115200 vt100
+ctrl-O
+Enter
+ctrl-x 
+
+
+Remove console
+==============
+sudo nano /boot/cmdline.txt
+delete these 2 fields:  console=ttyAMA0,115200 kgdboc=ttyAMA0,115200
+ctrl-O
+Enter
+ctrl-x 
+
+sudo apt-get install ser2net
+
+Configure ser2net, edit /etc/ser2net.conf. Comment out the default examples at the end of the file and add one line starting with 10001.
+
+
+#BANNER:banner:\r\nser2net port \p device \d [\s] (Debian GNU/Linux)\r\n\r\n
+
+10001:raw:0:/dev/ttyUSB0:38400 NONE 1STOPBIT 8DATABITS
+#2001:telnet:600:/dev/ttyS1:9600 8DATABITS NONE 1STOPBIT banner
+#3000:telnet:600:/dev/ttyS0:19200 8DATABITS NONE 1STOPBIT banner
+#3001:telnet:600:/dev/ttyS1:19200 8DATABITS NONE 1STOPBIT banner
+
+
+Save the file, connect the rfxtrx433(E) and restart the raspi.
+
+Now, the raspi is a tcp server on port 10001. 
+
+
+On a server that can connect to your raspi on port 10001, install swi prolog.
+Install latest software from the development branch. http://www.swi-prolog.org/download/devel
+
+Clone rfxtrx-prolog.git 
+
+sudo apt-get install git
+
+git clone https://github.com/skvamme/rfxtrx-prolog.git
+
+cd rfxtrx-prolog
+
+edit rfxyrx.pl line 6 to point to your Raspberry Pi ip address: tcp_connect('192.168.0.20':10001, StreamPair, []).
+
+Save the file.
+
+Start swipl. If you are on a linux box, just type "swipl", on a mac you have to give the full path to swipl. 
+sudo /Applications/SWI-Prolog.app/Contents/MacOS/swipl
+
+In the swipl console, type [rfxtrx].
+run().
+
+
+
+
