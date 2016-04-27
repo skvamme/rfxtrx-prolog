@@ -3,24 +3,6 @@ http://www.rfxcom.com/ It connects to a USB port of your Raspberry Pi.
 
 Install ser2net on your raspberry pi.
 
-Disable Serial Console
-======================
-sudo nano /etc/inittab
-insert a # sign in front of this line:
-T0:23:respawn:/sbin/getty -L ttyAMA0 115200 vt100
-ctrl-O
-Enter
-ctrl-x 
-
-
-Remove console
-==============
-sudo nano /boot/cmdline.txt
-delete these 2 fields:  console=ttyAMA0,115200 kgdboc=ttyAMA0,115200
-ctrl-O
-Enter
-ctrl-x 
-
 sudo apt-get install ser2net
 
 Configure ser2net, edit /etc/ser2net.conf. Comment out the default examples at the end of the file and add one line starting with 10001.
@@ -50,7 +32,7 @@ git clone https://github.com/skvamme/rfxtrx-prolog.git
 
 cd rfxtrx-prolog
 
-edit rfxyrx.pl line 6 to point to your Raspberry Pi ip address: tcp_connect('192.168.0.20':10001, StreamPair, []).
+edit rfxtrx.pl line 6 to point to your Raspberry Pi ip address: tcp_connect('192.168.0.20':10001, StreamPair, []).
 
 Save the file.
 
